@@ -1,0 +1,17 @@
+lv_obj_t* half_meter = lv_meter_create(lv_scr_act());
+
+// 🔧 Set size and position
+lv_obj_set_size(half_meter, 240, 240);
+lv_obj_center(half_meter);
+
+// 🔧 Create scale: from 180° to 0° (clockwise half-circle)
+lv_meter_scale_t* scale = lv_meter_add_scale(half_meter);
+lv_meter_set_scale_range(scale, 180, 0, 180);  // Start at bottom, sweep clockwise
+lv_meter_set_scale_ticks(scale, 37, 1, 10, lv_color_black());  // Minor ticks
+lv_meter_set_scale_major_ticks(scale, 9, 2, 15, lv_color_black(), -25);  // Major ticks
+
+// 🔧 Add needle indicator
+lv_meter_indicator_t* needle = lv_meter_add_needle_line(half_meter, scale, lv_palette_main(LV_PALETTE_RED), 2, 100);
+
+// 🔧 Set initial value
+lv_meter_set_indicator_value(half_meter, needle, 90);  // Pointing straight up
