@@ -5,6 +5,8 @@
 #include "src/airport_popup.h"
 #include "src/runway_data.h"
 #include <lvgl.h>
+#include "src/wind_meter.h"
+
 
 // Meter components
 lv_meter_scale_t* wind_scale = nullptr;
