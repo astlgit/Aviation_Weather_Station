@@ -249,27 +249,27 @@ void setupUI() {
 //lv_obj_set_size(wind_meter, 240, 240);
 
 // === BACKGROUND STYLE ===
-static lv_style_t style_meter_bg;
+/*static lv_style_t style_meter_bg;
 lv_style_init(&style_meter_bg);
 lv_style_set_bg_color(&style_meter_bg, lv_color_hex(0x63666A));
 lv_style_set_bg_opa(&style_meter_bg, LV_OPA_COVER);
-lv_obj_add_style(wind_meter, &style_meter_bg, LV_PART_MAIN);
+lv_obj_add_style(wind_meter, &style_meter_bg, LV_PART_MAIN);*/
 
 // === WIND ARROW (RED LINE) ===
-wind_arrow = lv_line_create(wind_meter);
+/*wind_arrow = lv_line_create(wind_meter);
 lv_line_set_points(wind_arrow, wind_arrow_points, sizeof(wind_arrow_points) / sizeof(wind_arrow_points[0]));
 lv_obj_set_style_line_color(wind_arrow, lv_palette_main(LV_PALETTE_RED), 0);
 lv_obj_set_style_line_width(wind_arrow, 4, 0);
 lv_obj_set_style_line_rounded(wind_arrow, false, 0);
 lv_obj_set_style_transform_pivot_x(wind_arrow, 19, 0);  // Adjust based on arrow shape
 lv_obj_set_style_transform_pivot_y(wind_arrow, 50, 0);
-lv_obj_align(wind_arrow, LV_ALIGN_CENTER, 1, 6);
+lv_obj_align(wind_arrow, LV_ALIGN_CENTER, 1, 6);*/
 
 // === SCALE SETUP ===
-wind_scale = lv_meter_add_scale(wind_meter);
+/*wind_scale = lv_meter_add_scale(wind_meter);
 lv_meter_set_scale_ticks(wind_meter, wind_scale, 37, 1, 10, lv_color_black());
 lv_meter_set_scale_major_ticks(wind_meter, wind_scale, 9, 2, 15, lv_color_black(), -25);
-lv_meter_set_scale_range(wind_meter, wind_scale, 0, 360, 360, 270);
+lv_meter_set_scale_range(wind_meter, wind_scale, 0, 360, 360, 270);*/
 
 /*// === RUNWAY PNG NEEDLE ===
 runwayNeedleImg = lv_meter_add_needle_img(
@@ -280,7 +280,7 @@ runwayNeedleImg = lv_meter_add_needle_img(
 );*/
 
 // === CARDINAL LABELS ===
-lv_obj_add_event_cb(wind_meter, [](lv_event_t* e) {
+/*lv_obj_add_event_cb(wind_meter, [](lv_event_t* e) {
   lv_obj_draw_part_dsc_t* dsc = (lv_obj_draw_part_dsc_t*)lv_event_get_param(e);
   if (dsc->part == LV_PART_TICKS && dsc->label_dsc) {
     switch (dsc->value) {
@@ -291,7 +291,7 @@ lv_obj_add_event_cb(wind_meter, [](lv_event_t* e) {
       default: dsc->text[0] = '\0'; break;
     }
   }
-}, LV_EVENT_DRAW_PART_BEGIN, NULL);
+}, LV_EVENT_DRAW_PART_BEGIN, NULL);*/
 
   
   // === RUNWAY BUTTONS ===
@@ -304,6 +304,7 @@ lv_obj_add_event_cb(wind_meter, [](lv_event_t* e) {
   lv_obj_add_style(runway_row, &style_container, 0);
 
   //drawRunwayLabels();
+  initWindMeter(col_left);
   rebuildRunwayButtons();
   highlightRunwayButtons();
   
