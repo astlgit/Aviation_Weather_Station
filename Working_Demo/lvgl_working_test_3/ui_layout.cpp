@@ -9,10 +9,10 @@
 
 
 // Meter components
-lv_meter_scale_t* wind_scale = nullptr;
-lv_meter_indicator_t* runwayNeedleImg = nullptr;
-lv_obj_t* wind_arrow = nullptr;
-lv_obj_t* wind_meter = nullptr;
+//lv_meter_scale_t* wind_scale = nullptr;
+//lv_meter_indicator_t* runwayNeedleImg = nullptr;
+//lv_obj_t* wind_arrow = nullptr;
+//lv_obj_t* wind_meter = nullptr;
 
 // Runway UI
 lv_obj_t* runway_row = nullptr;
@@ -90,14 +90,14 @@ void initContainerStyle() {
   lv_style_set_radius(&style_container, 0);
 }
 
-String normalizeIdent(const String& ident) {
+/*String normalizeIdent(const String& ident) {
   if (ident.length() > 2 && (ident.endsWith("L") || ident.endsWith("R") || ident.endsWith("C"))) {
     return ident.substring(0, ident.length() - 1);
   }
   return ident;
-}
+}*/
 
-void setRunwayNeedle(const String& ident1, const String& ident2, int bearing, bool flip180) {
+/*void setRunwayNeedle(const String& ident1, const String& ident2, int bearing, bool flip180) {
   // Remove old needle if it exists
   if (runwayNeedleImg) {
     lv_meter_remove_indicator(wind_meter, runwayNeedleImg);
@@ -123,7 +123,7 @@ void setRunwayNeedle(const String& ident1, const String& ident2, int bearing, bo
   lv_meter_set_indicator_value(wind_meter, runwayNeedleImg, heading);
 
   Serial.printf("Runway needle: %s → Heading: %d\n", path, heading);
-}
+}*/
 
 void rebuildRunwayButtons() {
   if (!runway_row) return;
@@ -245,8 +245,8 @@ void setupUI() {
   lv_obj_set_style_pad_row(col_left, 10, 0);
 
   // === WIND METER CONTAINER ===
-wind_meter = lv_meter_create(col_left);
-lv_obj_set_size(wind_meter, 240, 240);
+//wind_meter = lv_meter_create(col_left);
+//lv_obj_set_size(wind_meter, 240, 240);
 
 // === BACKGROUND STYLE ===
 static lv_style_t style_meter_bg;

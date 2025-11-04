@@ -1,24 +1,21 @@
 #include "metar_parser.h"
 #include "ui_layout.h"
 #include <math.h>
-#include "src/runway_data.h"  // or metar_parser.h
+#include "src/runway_data.h"
+#include "src/wind_meter.h"
+
 extern std::vector<RunwayPair> runwayPairs;
 
 extern lv_style_t style_vfr, style_mvfr, style_ifr, style_lifr;
 
 namespace MetarParser {
 
+
 void setWindNeedle(int windDir) {
-  // Safety checks
-  /*if (!windNeedle1 || !windNeedle2) return;
-
-  // Update meter needles
-  lv_meter_set_indicator_value(wind_meter, windNeedle1, windDir);
-  lv_meter_set_indicator_value(wind_meter, windNeedle2, (windDir + 180) % 360);*/
-
-  // Update arrow overlay if available
   if (wind_arrow) {
-    lv_obj_set_style_transform_angle(wind_arrow, windDir * 10, 0);  // LVGL uses 0.1° units
+    lv_obj_set_style_transform_angle(wind_arrow, windDir * 10, 0);
+  } else {
+    Serial.println("⚠️ wind_arrow is null — cannot rotate needle.");
   }
 }
 

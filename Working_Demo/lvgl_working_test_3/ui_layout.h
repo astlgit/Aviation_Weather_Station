@@ -16,8 +16,8 @@ extern lv_obj_t* label_temp;
 extern lv_obj_t* label_alt;
 extern lv_obj_t* label_runways;
 extern lv_obj_t* btn_airport;
-extern lv_obj_t* wind_meter;
-extern lv_obj_t* wind_arrow;
+//extern lv_obj_t* wind_meter;
+//extern lv_obj_t* wind_arrow;
 extern lv_obj_t* runway_row;
 
 // === Runway UI State ===
@@ -26,8 +26,8 @@ extern std::vector<lv_obj_t*> runwayButtons;
 extern std::vector<lv_obj_t*> runwayLabels;
 
 // === Meter Components ===
-extern lv_meter_scale_t* wind_scale;
-extern lv_meter_indicator_t* runwayNeedleImg;  // PNG-based runway needle
+//extern lv_meter_scale_t* wind_scale;
+//extern lv_meter_indicator_t* runwayNeedleImg;  // PNG-based runway needle
 
 // === Styles ===
 extern lv_style_t style_vfr;

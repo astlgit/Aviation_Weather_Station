@@ -78,18 +78,6 @@ void setup() {
  lv_png_init();              // Enables PNG decoding
 register_lvgl_sd_driver();  // Registers "S:" file system
 
- /*lv_fs_file_t f;
-lv_fs_res_t res = lv_fs_open(&f, "S:/runways/01_19.png", LV_FS_MODE_RD);
-
-if (res == LV_FS_RES_OK) {
-    Serial.println("LVGL file open succeeded.");
-    lv_fs_close(&f);
-} else {
-    Serial.println("LVGL file open failed.");
-}
-
-  // Load a runway overlay (example: 01/19 at 0°)
-  load_runway_overlay("01_19", 0);*/
 
   Serial.println("Creating UI");
   lvgl_port_lock(-1);
@@ -98,7 +86,7 @@ if (res == LV_FS_RES_OK) {
   const char* defaultStation = "KRDU";
   updateDisplay(defaultStation);
   lvgl_port_unlock();
-  //load_runway_overlay("01_19", 0);
+
 }
 
 void loop() {
