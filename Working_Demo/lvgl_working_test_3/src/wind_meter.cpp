@@ -6,16 +6,6 @@ lv_meter_scale_t* wind_scale = nullptr;
 lv_meter_indicator_t* runwayNeedleImg = nullptr;
 lv_meter_indicator_t* windNeedleImg = nullptr;
 
-static String normalizeIdent(const String& ident) {
-  String trimmed = ident;
-  trimmed.trim();
-  trimmed.replace(" ", "");
-  if (trimmed.endsWith("L") || trimmed.endsWith("R")) {
-    trimmed = trimmed.substring(0, trimmed.length() - 1);
-  }
-  return trimmed;
-}
-
 void initWindMeter(lv_obj_t* parent) {
   wind_meter = lv_meter_create(parent);
   lv_obj_set_size(wind_meter, 240, 240);
@@ -33,10 +23,10 @@ void initWindMeter(lv_obj_t* parent) {
   wind_scale = lv_meter_add_scale(wind_meter);
   lv_meter_set_scale_ticks(wind_meter, wind_scale, 37, 1, 10, lv_color_black());
   lv_meter_set_scale_major_ticks(wind_meter, wind_scale, 9, 2, 15, lv_color_black(), -25);
-  lv_meter_set_scale_range(wind_meter, wind_scale, 0, 360, 360, 270);
+  lv_meter_set_scale_range(wind_meter, wind_scale, 0, 360, 360, 270);  // ✅ Now included
 
   // Add wind arrow as needle image
-  windNeedleImg = lv_meter_add_needle_img(wind_meter, wind_scale, "S:/icons/wind_arrow.png", 120, 15);
+  windNeedleImg = lv_meter_add_needle_img(wind_meter, wind_scale, "S:/icons/wind_arrow.png", 100, 12);
   if (!windNeedleImg) {
     Serial.println("⚠️ Failed to load wind_arrow.png as needle.");
   }
@@ -60,30 +50,20 @@ void initWindMeter(lv_obj_t* parent) {
   }, LV_EVENT_DRAW_PART_BEGIN, NULL);
 }
 
-void setRunwayNeedle(const String& ident1, const String& ident2, int bearing, bool flip180) {
-  if (!wind_meter || !wind_scale) {
-    Serial.println("⚠️ wind_meter or wind_scale is null — cannot set runway needle.");
-    return;
-  }
+void setRunwayNeedle(int bearing) {
+  if (!wind_meter || !wind_scale) return;
 
-  String base1 = normalizeIdent(ident1);
-  String base2 = normalizeIdent(ident2);
-
-  char path[64];
-  snprintf(path, sizeof(path), "S:/runways/%s_%s.png", base1.c_str(), base2.c_str());
+  const char* path = "S:/runways/02_20.png";  // ✅ Fixed image for testing
 
   if (!runwayNeedleImg) {
     runwayNeedleImg = lv_meter_add_needle_img(wind_meter, wind_scale, path, 100, 12);
     if (!runwayNeedleImg) {
-      Serial.printf("⚠️ Failed to load runway needle image: %s\n", path);
+      Serial.println("⚠️ Failed to load runway needle image.");
       return;
     }
   }
 
-  int heading = flip180 ? (bearing + 180) % 360 : bearing;
-  lv_meter_set_indicator_value(wind_meter, runwayNeedleImg, heading);
-
-  Serial.printf("✅ Runway needle set: %s → Heading: %d\n", path, heading);
+  lv_meter_set_indicator_value(wind_meter, runwayNeedleImg, bearing);
 }
 
 void setWindNeedle(int windDir) {

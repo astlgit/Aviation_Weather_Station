@@ -6,6 +6,7 @@
 #include "src/runway_data.h"
 #include <lvgl.h>
 #include "src/wind_meter.h"
+#include "src/runway_data.h"
 
 
 // Meter components
@@ -19,6 +20,7 @@ lv_obj_t* runway_row = nullptr;
 std::vector<lv_obj_t*> runwayButtons;
 std::vector<lv_obj_t*> runwayLabels;
 String selectedRunwayPair = "";
+extern std::vector<RunwayPair> runwayPairs;
 
 // Global UI elements
 lv_obj_t* label_station;
@@ -145,7 +147,7 @@ void rebuildRunwayButtons() {
 
     runwayButtons.push_back(btn);
 
-    lv_obj_add_event_cb(btn, [](lv_event_t* e) {
+    lv_obj_add_event_cb(btn, [&runwayPairs](lv_event_t* e) {
       const char* label = lv_label_get_text(lv_obj_get_child(e->target, 0));
       selectedRunwayPair = String(label);
 
@@ -154,13 +156,9 @@ void rebuildRunwayButtons() {
 
       for (const RunwayPair& rwy : runwayPairs) {
         String expected = rwy.ident1 + "/" + rwy.ident2;
-        String reversed = rwy.ident2 + "/" + rwy.ident1;
 
-        if (String(label) == expected || String(label) == reversed) {
-          bool flip180 = (String(label) == reversed);
-          int bearing = flip180 ? rwy.bearing2 : rwy.bearing1;
-
-          setRunwayNeedle(rwy.ident1, rwy.ident2, bearing, flip180);
+        if (String(label) == expected) {
+          showRunwayNeedle(rwy.ident1, rwy.ident2, rwy.bearing1);
           break;
         }
       }
@@ -305,7 +303,9 @@ runwayNeedleImg = lv_meter_add_needle_img(
 
   //drawRunwayLabels();
   initWindMeter(col_left);
+  preloadDefaultRunways();
   rebuildRunwayButtons();
+  showRunwayNeedle("05L", "23R", 50);
   highlightRunwayButtons();
   
 

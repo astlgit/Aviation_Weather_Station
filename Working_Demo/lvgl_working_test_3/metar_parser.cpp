@@ -10,12 +10,11 @@ extern lv_style_t style_vfr, style_mvfr, style_ifr, style_lifr;
 
 namespace MetarParser {
 
-
 void setWindNeedle(int windDir) {
-  if (wind_arrow) {
-    lv_obj_set_style_transform_angle(wind_arrow, windDir * 10, 0);
+  if (windNeedleImg) {
+    lv_meter_set_indicator_value(wind_meter, windNeedleImg, windDir);
   } else {
-    Serial.println("⚠️ wind_arrow is null — cannot rotate needle.");
+    Serial.println("⚠️ windNeedleImg is null — cannot rotate wind needle.");
   }
 }
 
@@ -36,12 +35,11 @@ void parseCeiling(JsonDocument& doc) {
     const char* repr = c["repr"] | nullptr;
     int altitude = c["altitude"] | -1;
 
-    // Only consider BKN or OVC as ceiling layers
     if ((strcmp(type, "BKN") == 0 || strcmp(type, "OVC") == 0) && altitude >= 0) {
       int ft = altitude * 100;
       if (ceiling_ft == -1 || ft < ceiling_ft) {
         ceiling_ft = ft;
-        ceiling_repr = repr ? repr : type;  // fallback to type if repr is missing
+        ceiling_repr = repr ? repr : type;
       }
     }
   }
@@ -62,21 +60,20 @@ void parseAltimeter(JsonDocument& doc) {
   float alt_value = doc["altimeter"]["value"] | -1.0;
   if (alt_value > 0) {
     String text = "Alt: ";
-    text += String(alt_value, 2);  // 2 decimal places
+    text += String(alt_value, 2);
     text += " inHg";
     lv_label_set_text(label_alt, text.c_str());
   } else {
     lv_label_set_text(label_alt, "Alt: N/A");
   }
-
 }
 
 void parseFlightCategory(JsonDocument& doc) {
   const char* cat = doc["flight_rules"] | "...";
   lv_label_set_text_fmt(label_flight, "Flight: %s", cat);
 
-  lv_obj_remove_style_all(label_flight);  // For LVGL v8
-  lv_obj_add_style(label_flight, &style_box_shadow, 0);  // Apply box shape
+  lv_obj_remove_style_all(label_flight);
+  lv_obj_add_style(label_flight, &style_box_shadow, 0);
 
   if (strcmp(cat, "VFR") == 0) {
     lv_obj_add_style(label_flight, &style_vfr, 0);
@@ -108,6 +105,8 @@ void parseRunways(const String& json) {
   }
 
   JsonArray rwys = doc["runways"].as<JsonArray>();
+  std::vector<RunwayPair> parsedRunways;
+
   for (JsonVariant v : rwys) {
     JsonObject rw = v.as<JsonObject>();
 
@@ -118,11 +117,11 @@ void parseRunways(const String& json) {
 
     if (strlen(ident1) > 0 && strlen(ident2) > 0 &&
         bearing1 >= 0 && bearing2 >= 0) {
-      runwayPairs.push_back({ String(ident1), (int)bearing1, String(ident2), (int)bearing2 });
+      parsedRunways.push_back({ String(ident1), (int)bearing1, String(ident2), (int)bearing2 });
     }
   }
 
-  //Serial.printf("Parsed %d runway pairs\n", runwayPairs.size());
+  preloadRunwaysForAirport(parsedRunways);
 }
 
 void parseRunwayWind(JsonDocument& doc) {
@@ -166,7 +165,7 @@ void parseClouds(JsonDocument& doc) {
       if (repr) {
         cltxt += String(type) + " " + String(repr) + " ft\n";
       } else if (altitude >= 0) {
-        cltxt += String(type) + " " + String(altitude * 100) + " ft\n";  // AVWX gives altitude in hundreds
+        cltxt += String(type) + " " + String(altitude * 100) + " ft\n";
       } else {
         cltxt += String(type) + " — ft\n";
       }

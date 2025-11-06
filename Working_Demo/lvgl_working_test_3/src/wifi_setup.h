@@ -8,7 +8,7 @@ const char* ssid_2 = "Verizon-MW513U-7B87";
 const char* password_2 = "297fc898";
 
 // Select profile: change this to 1 or 2
-int wifi_profile = 2;
+int wifi_profile = 1;
 
 // Active credentials
 const char* active_ssid = nullptr;
