@@ -11,4 +11,3 @@ extern lv_obj_t* wind_arrow;
 void initWindMeter(lv_obj_t* parent);
 void setWindNeedle(int windDir);
 void setRunwayNeedle(int bearing);
-

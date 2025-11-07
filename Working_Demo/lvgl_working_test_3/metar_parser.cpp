@@ -10,13 +10,13 @@ extern lv_style_t style_vfr, style_mvfr, style_ifr, style_lifr;
 
 namespace MetarParser {
 
-void setWindNeedle(int windDir) {
+/*void setWindNeedle(int windDir) {
   if (windNeedleImg) {
     lv_meter_set_indicator_value(wind_meter, windNeedleImg, windDir);
   } else {
     Serial.println("⚠️ windNeedleImg is null — cannot rotate wind needle.");
   }
-}
+}*/
 
 void computeWindComponents(int wind_dir, float wind_spd, int rw_heading, float &head, float &cross) {
   int diff = (wind_dir - rw_heading + 360) % 360;
