@@ -6,7 +6,7 @@
 
 void updateDisplay(const String& icao);
 String fetchMetarJson();
-String fetchStationJson();
+//String fetchStationJson();
 void setStation(const String& icao);
 //void fetchAvwxData(const char* icao);
 

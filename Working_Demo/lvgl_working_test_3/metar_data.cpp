@@ -14,7 +14,10 @@ void setStation(const String& icao) {
 
 String fetchMetarJson() {
   HTTPClient http;
-  http.begin("https://avwx.rest/api/metar/" + station + "?token=" + apiKey);
+  String url = "https://avwx.rest/api/metar/" + station +
+               "?token=" + apiKey +
+               "&options=info";
+  http.begin(url);
   int code = http.GET();
   String payload = "{}";
   if (code == 200) payload = http.getString();
@@ -22,7 +25,7 @@ String fetchMetarJson() {
   return payload;
 }
 
-String fetchStationJson() {
+/*String fetchStationJson() {
   HTTPClient http;
   String url = "https://avwx.rest/api/station/" + station +
                "?token=" + apiKey +
@@ -33,7 +36,7 @@ String fetchStationJson() {
   if (code == 200) payload = http.getString();
   http.end();
   return payload;
-}
+}*/
 
 void updateDisplay(const String& icao) {
   setStation(icao);
@@ -50,7 +53,7 @@ void updateDisplay(const String& icao) {
   }
 
   // Fetch Station JSON
-  String stationJson = fetchStationJson();
+  /*String stationJson = fetchStationJson();
   DynamicJsonDocument stationDoc(8192);
   DeserializationError stationErr = deserializeJson(stationDoc, stationJson);
   if (stationErr) {
@@ -58,10 +61,10 @@ void updateDisplay(const String& icao) {
     Serial.println(stationErr.c_str());
     lv_label_set_text(label_crosswind, "Runway data unavailable");
     return;
-  }
+  }*/
 
   // Parse and update runway data before calculating wind alignment
-  MetarParser::parseRunways(stationJson);
+  MetarParser::parseRunways(metarJson);
   rebuildRunwayButtons();
   //drawRunwayLabels();
   //Serial.printf("Rebuilt %d runway buttons\n", runwayPairs.size());

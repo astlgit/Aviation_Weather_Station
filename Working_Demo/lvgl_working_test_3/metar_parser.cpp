@@ -96,7 +96,7 @@ void parseWind(JsonDocument& doc) {
 
 void parseRunways(const String& json) {
   runwayPairs.clear();
-  StaticJsonDocument<2048> doc;
+  StaticJsonDocument<8192> doc;
   DeserializationError err = deserializeJson(doc, json);
   if (err) {
     Serial.print("Runway JSON error: ");
@@ -104,19 +104,17 @@ void parseRunways(const String& json) {
     return;
   }
 
-  JsonArray rwys = doc["runways"].as<JsonArray>();
+  JsonArray rwys = doc["info"]["runways"].as<JsonArray>();
   std::vector<RunwayPair> parsedRunways;
 
   for (JsonVariant v : rwys) {
     JsonObject rw = v.as<JsonObject>();
-
     const char* ident1 = rw["ident1"] | "";
     const char* ident2 = rw["ident2"] | "";
     float bearing1 = rw["bearing1"] | -1.0;
     float bearing2 = rw["bearing2"] | -1.0;
 
-    if (strlen(ident1) > 0 && strlen(ident2) > 0 &&
-        bearing1 >= 0 && bearing2 >= 0) {
+    if (strlen(ident1) > 0 && strlen(ident2) > 0 && bearing1 >= 0 && bearing2 >= 0) {
       parsedRunways.push_back({ String(ident1), (int)bearing1, String(ident2), (int)bearing2 });
     }
   }
